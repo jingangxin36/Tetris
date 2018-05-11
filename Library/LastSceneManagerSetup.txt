@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/XLua/Examples/04_LuaObjectOrented/InvokeLua.unity
+  isLoaded: 1
+  isActive: 1
