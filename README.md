@@ -1,18 +1,17 @@
-# Tetris
+Tetris
+
 # 俄罗斯方块
 
 Dome
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo.gif)
 
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo1.png)
+
 基于Unity2018.1, UGUI
 
-尝试使用了FSM有限状态机框架, MVC框架, 消息处理机制
+使用了MVC的UI框架
 
-仍有很多不足
+仍有很多bug
 
-待完善的有:
-
-- 游戏重新开始功能
-- 本地数据储存和排行榜
-
+还在修改和增加新功能!
