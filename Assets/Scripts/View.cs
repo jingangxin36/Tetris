@@ -14,6 +14,7 @@ public class View : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
+        Debug.Log("zsh");
     }
 
     // Update is called once per frame
