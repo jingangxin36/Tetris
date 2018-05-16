@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris", "Assembly-CSharp.csproj", "{D2BFFF02-D087-DB1A-C7FE-6538A965A290}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris", "Assembly-CSharp-Editor.csproj", "{C5FAFF43-E2E9-1C6D-FF57-16A3584B2CDE}"
