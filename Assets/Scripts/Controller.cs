@@ -11,8 +11,6 @@ public class Controller : Singleton<Controller> {
     public View view;
     //    [HideInInspector]
     //    public CameraManager cameraManager;
-    //    [HideInInspector]
-    //    public AudioManager audioManager;
 
 
     protected override void Awake() {
@@ -20,7 +18,6 @@ public class Controller : Singleton<Controller> {
         model = GameObject.FindGameObjectWithTag("Model").GetComponent<Model>();
         view = GameObject.FindGameObjectWithTag("View").GetComponent<View>();
         //        cameraManager = GetComponent<CameraManager>();
-        //        audioManager = GetComponent<AudioManager>();
 
         mEventManager = EventManager.Instance;
         mEventManager.Listen(UIEvent.ENTER_PLAY_STATE, EnterPlayState);
