@@ -16,14 +16,16 @@ public static class Vector3Extension {
 public class Model : MonoBehaviour {
 
     private const int kScoreStep = 100;
-    private int mCurrentLevel;
 
     public const int kNormalRows = 20;
     public const int kMaxRows = 22;
     public const int kMaxColumns = 10;
 
-    public int Score { get; private set; } 
-    public int HighScore { get; private set; } 
+    private int Score { get; set; }
+    private int HighScore { get; set; }
+    private int Row { get; set; }
+
+    private int Level { get; set; }
 
     private Transform[,] mMap = new Transform[kMaxColumns, kMaxRows];
     // Use this for initialization
@@ -32,11 +34,7 @@ public class Model : MonoBehaviour {
 
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
     public bool IsShapePositionValid(Transform shapeTransform) {
         foreach (Transform childTransform in shapeTransform) {
@@ -76,24 +74,34 @@ public class Model : MonoBehaviour {
             bool isFull = CheckIsRowFull(i);
             if (isFull) {
                 count++;
+                Row++;
                 ClearOneRow(i);
                 MoveLines(i + 1);
                 i--;//消除一行之后更新数据
             }
         }
-        if (count > 0) {
-            Score += (count * 100);
-            if (Score > HighScore) {
-                HighScore = Score;
-            }
-            EventManager.Instance.Fire(UIEvent.REFRESH_SCORE);
-            var tempLevel = Score / kScoreStep;
-            if (tempLevel > mCurrentLevel) {
-                mCurrentLevel = tempLevel;
-                GameManager.Instance.UpgradeLevel();
+        UpdateScore(count);
+        UpdateLevel();
+        EventManager.Instance.Fire(UIEvent.REFRESH_SCORE, 0);
+    }
 
-            }
+    private void UpdateScore(int count) {
+        if (count == 0) {
+            Score += 2;
+        }
+        else {
+            Score += count * 100;
+        }
+        if (Score > HighScore) {
+            HighScore = Score;
+        }
+    }
 
+    private void UpdateLevel() {
+        var tempLevel = Score / kScoreStep;
+        if (tempLevel > Level) {
+            Level = tempLevel;
+            GameManager.Instance.UpgradeLevel();
         }
     }
 
@@ -140,7 +148,8 @@ public class Model : MonoBehaviour {
     }
 
     public int[] GetScoreInfo() {
-        return new[] {HighScore, Score};
+        //todo 可以改成josn格式
+        return new[] {HighScore, Score, Row, Level};
     }
 
     private void LoadData() {
@@ -151,11 +160,13 @@ public class Model : MonoBehaviour {
         PlayerPrefs.SetInt("HighestScore", HighScore);
     }
 
+
     public void ClearData() {
         HighScore = 0;
         Score = 0;
+        Row = 0;
+        Level = 0;
         SaveData();
-
     }
 
     public void RefreshGame() {
@@ -163,8 +174,11 @@ public class Model : MonoBehaviour {
         mMap = new Transform[kMaxColumns, kMaxRows];
         GameManager.Instance.RestartGame();
         Score = 0;
-        mCurrentLevel = 0;
-        EventManager.Instance.Fire(UIEvent.REFRESH_SCORE);
+        Row = 0;
+        Level = 0;
+        EventManager.Instance.Fire(UIEvent.REFRESH_SCORE, 0);
 
     }
+
+
 }

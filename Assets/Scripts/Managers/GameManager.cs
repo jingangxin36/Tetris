@@ -95,6 +95,7 @@ public class GameManager : Singleton<GameManager> {
         mCurrentSpeed = currentShape.Upgrade();
         nextShape?.Upgrade();
         //todo rool tip
+//        EventManager.Instance.Fire(UIEvent.UPGRADE_LEVEL);
         Controller.Instance.view.ShowUpdateRoolTip();
     }
 

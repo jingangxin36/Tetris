@@ -24,7 +24,10 @@ public enum UIEvent
     CLEAR_DATA,
     SET_MUIE,
     REFRESH_SCORE, 
-    
+    SHOW_ALERT,
+    SHOW_DIFFICULITY_PANEL,
+    SHOW_DEFINED_PANEL,
+//    UPGRADE_LEVEL
 
 
 }

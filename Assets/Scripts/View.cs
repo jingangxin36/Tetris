@@ -14,7 +14,7 @@ public class View : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        Test();
+
     }
 
     private void Test() {
@@ -31,19 +31,25 @@ public class View : MonoBehaviour {
             Debug.Log("here");
             Debug.Log(temp.ToString());//1,3
         }
-        Debug.Log(stack.Pop());
+        Debug.Log(stack.IsEmpty());
+
+        Debug.Log(stack.Size);
         Debug.Log(stack.Peek());//3
 
         foreach (var temp in stack) {
             Debug.Log(temp);//1
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 20; i++) {
             stack.Push(i);
         }
         foreach (var temp in stack) {
             Debug.Log(temp);//1
         }
+        stack.Clear();
+        Debug.Log(stack.Size);
+        Debug.Log(stack.IsEmpty());
+
     }
 
     // Update is called once per frame
@@ -53,41 +59,52 @@ public class View : MonoBehaviour {
 
     public void TabbarOnTab(int index) {
         //game over and isRestart
-        mCurrentPanel?.Hide();
+//        mCurrentPanel?.Hide();//TODO
+        HidePanel(mCurrentPanel);
         if (index == 0 || index == -1) {
-            GameManager.Instance.ResetSpeed();
+            bool isRestart;
             //restart
-            if (index == -1) {
-                mCurrentPanel = panels[0].Show(true);
+            if (index == 0) {
+                isRestart = true;
+                GameManager.Instance.ResetSpeed();
+
             }
             //start or continue
             else {
 
                 if (mIsGameOver) {
-                    mCurrentPanel = panels[0].Show(true);
+                    isRestart = true;
+
                     mIsGameOver = false;
                 }
                 else {
-                    mCurrentPanel = panels[0].Show();
+                    isRestart = false;
+
                 }
             }
+            mCurrentPanel = UIManager.Instance.ShowOne(panels[0]);
             HideMenuTabbar();
+            EventManager.Instance.Fire(UIEvent.ENTER_PLAY_STATE, isRestart);
         }
         else {
-            mCurrentPanel = panels[index].Show();
+            mCurrentPanel = UIManager.Instance.ShowOne(panels[index]);
         }
-        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO);
+        //todo 应该不用fire新数据吧
+//        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO, index);
         AudioManager.Instance.PlayCursor();
     }
 
-    public void UpdatePanelInfo(int[] info) {
+    public void UpdatePanelInfo(int panelType, int[] info) {
+        mCurrentPanel = panels[panelType];
         mCurrentPanel?.UpdatePanelInfo(info);
     }
 
     public void PauseGame() {
 
         ShowMenuTabbar();
-        panels[0].Hide();
+//        panels[0].Hide();//TODO
+        HidePanel(panels[0]);
+
         AudioManager.Instance.PlayCursor();
 
     }
@@ -120,5 +137,25 @@ public class View : MonoBehaviour {
         if (!updateRoolTip.activeSelf) {
             updateRoolTip.SetActive(true);
         }
+    }
+
+    public void ShowAlert() {
+        UIManager.Instance.ShowOne(panels[4]);
+    }
+
+    private void HidePanel(BasePanel targetPanel) {
+        if (targetPanel != null) {
+            UIManager.Instance.SetClose(targetPanel);
+        }
+    }
+
+    public void ShowDifficultyPanel() {
+        UIManager.Instance.ShowOne(panels[6]);
+
+    }
+
+    public void ShowDefinedButtonPanel() {
+        UIManager.Instance.ShowOne(panels[5]);
+
     }
 }

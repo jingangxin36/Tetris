@@ -5,18 +5,13 @@ using UnityEngine.UI;
 
 public class SettingPanel : BasePanel {
     public Button muteButton;
+    public Button closeButton;
+    public Button definedButton;
+    public Button difficulityButton;
     public Image muteImage;
-    private bool isMute;
-    // Use this for initialization
+    private bool mIsMute;
     void Awake() {
-        
-        muteButton.onClick.AddListener(() => {
-                isMute = !isMute;
-                muteImage.enabled = isMute;
-                EventManager.Instance.Fire(UIEvent.SET_MUIE, isMute);
-            }
-        );
-
+        Init();
     }
 
     // Update is called once per frame
@@ -24,16 +19,39 @@ public class SettingPanel : BasePanel {
 
     }
 
-    public override BasePanel Show(bool isRestart = false) {
+    public override BasePanel Show() {
         if (!gameObject.activeSelf) {
             gameObject.SetActive(true);
         }
         return this;
     }
 
+    public override void Init() {
+        panelType = 1;
+        stack = true;
+        muteButton.onClick.AddListener(() => {
+                mIsMute = !mIsMute;
+                muteImage.enabled = mIsMute;
+                EventManager.Instance.Fire(UIEvent.SET_MUIE, mIsMute);
+            }
+        );
+        closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
+        definedButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_DEFINED_PANEL));
+        difficulityButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_DIFFICULITY_PANEL));
+    }
+
     public override void Hide() {
+//        Debug.Log("here");
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
         }
+    }
+
+    public override void Destroy() {
+        throw new System.NotImplementedException();
+    }
+
+    private void SetClose() {
+        
     }
 }
