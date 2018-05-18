@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,10 +7,12 @@ using UnityEngine.UI;
 public class RankPanel : BasePanel {
 
     public Button clearButton;
+    public Button closeButton;
+
     public Text highestScoreText;
     // Use this for initialization
     void Awake() {
-        clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.CLEAR_DATA));
+        Init();
     }
 
     // Update is called once per frame
@@ -17,11 +20,21 @@ public class RankPanel : BasePanel {
 		
 	}
 
-    public override BasePanel Show(bool isRestart = false) {
+    public override BasePanel Show() {
         if (!gameObject.activeSelf) {
             gameObject.SetActive(true);
         }
+        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO, Convert.ToInt32(panelType));
         return this;
+    }
+
+    public override void Init() {
+        panelType = 2;
+//        clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.CLEAR_DATA));
+        clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_ALERT));
+
+        closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
+        stack = true;
     }
 
     public override void Hide() {
@@ -31,12 +44,19 @@ public class RankPanel : BasePanel {
         }
     }
 
+    public override void Destroy() {
+    }
+
     public override void UpdatePanelInfo(int[] info) {
         //info[0]>>highest
         if (info == null || info.Length == 0) {
             return;
         }
         highestScoreText.text = info[0].ToString();
+
+    }
+
+    private void SetClose() {
 
     }
 }

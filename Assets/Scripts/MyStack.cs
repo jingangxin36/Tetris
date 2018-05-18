@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//只用于存放自定义类
 
-public class MyStack<T> :  IEnumerable, IEnumerator {
+public class MyStack<T> :  IEnumerable {
 
     private T[] mStackArray;
-//    private int mStackSize;
     private const int kDefaultArrayLength = 5;
 
-    private int position = -1;
 
     public MyStack() {
         mStackArray = new T[kDefaultArrayLength];
@@ -25,50 +24,62 @@ public class MyStack<T> :  IEnumerable, IEnumerator {
 
     public void Clear() {
         Size = 0;
-        position = -1;
-        //todo 数组 = null?
-        for (int i = 0; i < Size; i++) {
-            mStackArray[i] = default(T);
-        }
+        ArrayGC(ref mStackArray, Size);
     }
 
     public T Pop() {
-        Debug.Log("Pop"); //1,2,3
-        position--;
+        //todo check is empty
+        if (IsEmpty()) {
+            return default(T);
+        }
 
-        return mStackArray[Size--];
+        Size--;
+        var result = mStackArray[Size];
+        ArrayGC(ref mStackArray, Size);
+        return result;
     }
 
-    public void Push(T item) {
-        Debug.Log("Push"); //1,2,3
+    public T Push(T item) {
+        //todo check is null
+        if (Equals(item, default(T))) {
+            return item;
+        }
 
-        Size++;
-        position = Size++;
-        //todo if need resize
-        if (Size == mStackArray.Length) {
+        mStackArray[Size++] = item;        
+        if (Size >= mStackArray.Length - 1) {
             Resize();
         }
-        mStackArray[Size] = item;
+        return default(T);
     }
 
     public T Peek() {
-        Debug.Log("Peek"); //1,2,3
+        //todo check is empty
+        if (IsEmpty()) {
+            return default(T);
+        }
 
-        return mStackArray[Size];
+        return mStackArray[Size-1];
     }
 
     public bool Remove(T item) {
-        Debug.Log("Remove"); //1,2,3
+        //todo check is null
+        if (Equals(item, default(T))) {
+            return false;
+        }
 
         var isFound  = false;
         for (int i = 0; i < Size; i++) {
-            if (Equals(item, mStackArray[i])) {
+            if (!isFound && Equals(item, mStackArray[i])) {
                 isFound = true;
             }
             if (isFound) {
-                if ((i + 1) < Size &&　Equals(default(T), mStackArray[i+1])) {
-                    return true ;
+                //if end
+                if (i + 1 == Size) {
+                    Size--;
+                    ArrayGC(ref mStackArray, Size);
+                    return true;
                 }
+                //if not end, copy
                 mStackArray[i] = mStackArray[i + 1];
             }
         }
@@ -76,38 +87,32 @@ public class MyStack<T> :  IEnumerable, IEnumerator {
     }
 
     private void Resize() {
-        Debug.Log("Resize"); //1,2,3
+        Debug.Log("Begine Resize: " + Peek());
 
-        var newArray = new T[Size * 2];
+        var newArray = new T[mStackArray.Length * 2];
         for (int i = 0; i < mStackArray.Length; i++) {
             newArray[i] = mStackArray[i];
-            mStackArray[i] = default(T);//todo if need
         }
         mStackArray = newArray;
+        Debug.Log("Finish Resize: " + mStackArray.Length);
+
     }
     /// <summary>
     /// 返回栈中所有元素, 一个一个列出来
     /// </summary>
     /// <returns></returns>
     public IEnumerator GetEnumerator() {
-        for (int i = Size-1; i <=0; i--) {
+        for (int i = Size-1; i >=0; i--) {
             yield return mStackArray[i];
         }
     }
 
-    public bool MoveNext() {
-        if (position<= 0) {
-            return false;
+    private void ArrayGC(ref T[] array, int index) {
+        for (int i = index; i < array.Length; i++) {
+            if (Equals(default(T), array[i])) {
+                return;
+            }
+            array[i] = default(T);
         }
-        position--;
-        return true;
-    }
-
-    public void Reset() {
-        Clear();
-    }
-
-    public object Current {
-        get { return Peek(); }
     }
 }

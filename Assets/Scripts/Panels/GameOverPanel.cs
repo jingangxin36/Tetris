@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,19 +9,25 @@ public class GameOverPanel : BasePanel {
     public Text currentScoreText;
     public Text highestScoreText;
     public Text titleText;
+    public Button closeButton;
 
 
-    // Update is called once per frame
-    void Update() {
-
+    void Awake() {
+        Init();
     }
 
-    public override BasePanel Show(bool isRestart = false) {
+    public override BasePanel Show() {
         if (!gameObject.activeSelf) {
             gameObject.SetActive(true);
         }
-        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO);
+        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO, Convert.ToInt32(panelType));
         return this;
+    }
+
+    public override void Init() {
+        panelType = 3;
+        closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
+
     }
 
     public override void Hide() {
@@ -32,6 +39,9 @@ public class GameOverPanel : BasePanel {
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
         }
+    }
+
+    public override void Destroy() {
     }
 
     public override void UpdatePanelInfo(int[] info) {
@@ -46,5 +56,9 @@ public class GameOverPanel : BasePanel {
 
         //set title
         titleText.text = info[0] == info[1] ? "新纪录!" : "游戏结束";
+    }
+
+    private void SetClose() {
+
     }
 }

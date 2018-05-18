@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Controller : Singleton<Controller> {
     private EventManager mEventManager;
+    //also used in other class
     [HideInInspector]
     public Model model;
     [HideInInspector]
@@ -30,18 +31,42 @@ public class Controller : Singleton<Controller> {
         mEventManager.Listen(UIEvent.CLEAR_DATA, ClearData);
         mEventManager.Listen(UIEvent.SET_MUIE, SetMute);
         mEventManager.Listen(UIEvent.REFRESH_SCORE, GetScoreInfo);
+        mEventManager.Listen(UIEvent.SHOW_ALERT, ShowAlert);
+        mEventManager.Listen(UIEvent.SHOW_DEFINED_PANEL, ShowDefinedButtonPanel);
+        mEventManager.Listen(UIEvent.SHOW_DIFFICULITY_PANEL, ShowDifficultyPanel);
+//        mEventManager.Listen(UIEvent.UPGRADE_LEVEL, UpgradeLevel);
     }
 
- 
+//    private void UpgradeLevel(object obj) {
+//        
+//        view.ShowUpdateRoolTip();
+//        model.UpgradeLevel();
+//    }
+
+    private void ShowDifficultyPanel(object obj) {
+        view.ShowDifficultyPanel();
+
+    }
+
+    private void ShowDefinedButtonPanel(object obj) {
+        view.ShowDefinedButtonPanel();
+
+    }
+
+    private void ShowAlert(object obj = null) {
+        view.ShowAlert();
+    }
+
 
     private void SetMute(object obj = null) {
         var isMute = (bool)obj;
         AudioManager.Instance.SetMute(isMute);
     }
 
-    private void ClearData(object objobj = null) {
+    private void ClearData(object obj = null) {
+        int panelType = (int)obj;
         model.ClearData();
-        view.UpdatePanelInfo(model.GetScoreInfo());
+        view.UpdatePanelInfo(panelType, model.GetScoreInfo());
     }
 
     private void GameOver(object obj = null) {
@@ -55,7 +80,9 @@ public class Controller : Singleton<Controller> {
     }
 
     private void GetScoreInfo(object obj = null) {
-        view.UpdatePanelInfo(model.GetScoreInfo());
+//        Debug.Log(obj);
+        int panelType = (int)obj;
+        view.UpdatePanelInfo(panelType, model.GetScoreInfo());
     }
 
 
@@ -77,11 +104,12 @@ public class Controller : Singleton<Controller> {
         ctrl.cameraManager.ZoomIn();
         ctrl.gameManager.StartGame();
          */
-        GameManager.Instance.StartGame();
         var isRestart = (bool)obj;
         if (isRestart) {
             model.RefreshGame();
         }
+        GameManager.Instance.StartGame();
+
         //if restart model.clear shape&data
     }
 
