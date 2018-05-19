@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,8 @@ public  class PlayPanel : BasePanel {
     public Button rightButton;
     public Button upButton;
     public Button downButton;
+
+    private Sequence mScoreSequence;
 
 
 
@@ -42,6 +45,7 @@ public  class PlayPanel : BasePanel {
 
     public override void Init() {
         panelType = 0;
+        mScoreSequence.SetAutoKill(false);
         leftButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepLeft());
         rightButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepRight());
         upButton.onClick.AddListener(() => GameManager.Instance.currentShape.RotateShape());
@@ -62,6 +66,10 @@ public  class PlayPanel : BasePanel {
         throw new System.NotImplementedException();
     }
 
+
+
+    private int oldScore = 0;
+
     public override void UpdatePanelInfo(int[] info) {
 
 
@@ -75,13 +83,39 @@ public  class PlayPanel : BasePanel {
         if (info == null || info.Length == 0) {
             return;
         }
-//        foreach (var i in info) {
-//            Debug.Log(i);
-//        }
-        highestScoreText.text = info[0].ToString();
+        //        foreach (var i in info) {
+        //            Debug.Log(i);
+        //        }
+
+        int newScore = info[1];
+//        mScoreSequence.Append(DOTween.To(delegate (){
+//            return 0.0f;
+//        }, delegate(double value) {
+//            var temp = Math.Floor(value);
+//            currentScoreText.text = temp + "";
+//
+//        }, oldScore, newScore, 0.6));
+        mScoreSequence.Append(DOTween.To(delegate (float value) {
+            var temp = Math.Floor(value);
+            currentScoreText.text = temp + "";
+        }, oldScore, newScore, 0.4f));
+        oldScore = newScore;
+//        highestScoreText.text = info[0].ToString();
+
+        //todo set tween
         currentScoreText.text = info[1].ToString();
+        //todo set tween
         rowText.text = info[2].ToString();
+        //todo set tween
         levelText.text = info[3].ToString();
 
     }
+
+
+
+//    private Tweener SetRollNumberText() {
+//        
+//    }
+
+
 }

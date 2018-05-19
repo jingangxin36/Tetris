@@ -89,8 +89,12 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 221}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
+<<<<<<< HEAD
   controlID: 126
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
+=======
+  controlID: 128
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -215,11 +219,15 @@ MonoBehaviour:
   controlID: 42
 =======
     height: 958
-  m_MinSize: {x: 913, y: 492}
-  m_MaxSize: {x: 22008, y: 14042}
+  m_MinSize: {x: 917, y: 392}
+  m_MaxSize: {x: 22012, y: 14042}
   vertical: 0
+<<<<<<< HEAD
   controlID: 125
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
+=======
+  controlID: 9
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -246,11 +254,15 @@ MonoBehaviour:
 =======
     width: 804
     height: 958
-  m_MinSize: {x: 232, y: 492}
+  m_MinSize: {x: 232, y: 392}
   m_MaxSize: {x: 10002, y: 14042}
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
   vertical: 1
+<<<<<<< HEAD
   controlID: 64
+=======
+  controlID: 10
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -301,15 +313,19 @@ MonoBehaviour:
 =======
     width: 804
     height: 559
-  m_MinSize: {x: 202, y: 221}
+  m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
+<<<<<<< HEAD
   m_ActualView: {fileID: 16}
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
+=======
+  m_ActualView: {fileID: 15}
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
   m_Panes:
   - {fileID: 16}
   - {fileID: 15}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -490,17 +506,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Tetris Assets/Sprites
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Tetris Assets/Sprites
+  - Assets/Scripts
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\Unity3Dpractice\Tetris\Tetris
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
 <<<<<<< HEAD
     m_SelectedIDs: 5c300000
     m_LastClickedID: 12380
@@ -510,6 +527,11 @@ MonoBehaviour:
     m_LastClickedID: 11504
     m_ExpandedIDs: 0000000080290000b6290000682b00008434000086340000883400008a3400008c3400008e34000000ca9a3bffffff7f
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
+=======
+    m_SelectedIDs: be290000
+    m_LastClickedID: 10686
+    m_ExpandedIDs: 0000000088290000be290000722b000026370000283700002a3700002c3700002e3700003037000000ca9a3bffffff7f
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -537,7 +559,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
     m_ExpandedIDs: 00000000263000005c3000000e3b0000103b0000123b0000143b0000163b0000183b0000
+=======
+    m_ExpandedIDs: 0000000088290000be290000722b000026370000283700002a3700002c3700002e37000030370000
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -652,6 +678,7 @@ MonoBehaviour:
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_SelectedIDs: 
     m_LastClickedID: 0
     m_ExpandedIDs: 92f4ffff00000000
@@ -660,6 +687,11 @@ MonoBehaviour:
     m_LastClickedID: -812208
     m_ExpandedIDs: 92b0f1ffd6b2f1ffca91f3ff509bf3ffae5df7ff94bbf9ffe8bcf9ff40a3faff4ca3faff644efdff2a5ffdfff0fbffff00000000402d0000c82d0000d62d00001e2e0000
 >>>>>>> 12b91528fe136131a25137dbea9a6022b6d1bb81
+=======
+    m_SelectedIDs: 50300000
+    m_LastClickedID: 12368
+    m_ExpandedIDs: f0fbffff000000008c2d00007a2f0000
+>>>>>>> 258558588236d641ccfd4a19d27be351e8e43a86
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

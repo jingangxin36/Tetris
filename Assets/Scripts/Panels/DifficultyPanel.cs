@@ -31,14 +31,15 @@ public class DifficultyPanel : BasePanel {
     public override void Init() {
         panelType = 5;
         closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
-        mToggles = toggleGroupGameObject.GetComponentsInChildren<Toggle>();
+        //        mToggles = toggleGroupGameObject.GetComponentsInChildren<Toggle>();
 
         // todo init toggles
 
         for (int i = 0; i < mToggles.Length; i++) {
             var index = i;
             mToggles[i].onValueChanged.AddListener(
-                delegate {
+                delegate
+                {
                     if (mToggles[index].isOn) {
                         SwitchDifficulty(index);
                     }
