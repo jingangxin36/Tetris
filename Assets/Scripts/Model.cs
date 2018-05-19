@@ -87,10 +87,10 @@ public class Model : MonoBehaviour {
 
     private void UpdateScore(int count) {
         if (count == 0) {
-            Score += 2;
+            Score += 20;
         }
         else {
-            Score += count * 100;
+            Score += count * 1000;
         }
         if (Score > HighScore) {
             HighScore = Score;

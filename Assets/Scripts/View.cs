@@ -82,7 +82,7 @@ public class View : MonoBehaviour {
 
                 }
             }
-            mCurrentPanel = UIManager.Instance.ShowOne(panels[0]);
+            mCurrentPanel = UIManager.Instance. ShowOne(panels[0]);
             HideMenuTabbar();
             EventManager.Instance.Fire(UIEvent.ENTER_PLAY_STATE, isRestart);
         }
