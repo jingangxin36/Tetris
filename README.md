@@ -1,17 +1,30 @@
-Tetris
+
 
 # 俄罗斯方块
 
-Dome
+## Demo:
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo.gif)
 
-![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo1.png)
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo1.gif)
 
-基于Unity2018.1, UGUI
+## 下载地址:
 
-使用了MVC的UI框架
+[**MyTetris.apk**](https://github.com/jingangxin36/Tetris/releases/download/V1.1/MyTetris.apk)
 
-仍有很多bug
+## 环境:
 
-还在修改和增加新功能!
+Unity2018.1
+
+## 主要技术:
+
+MVC, DOTween
+
+## TODO: 
+
+- [ ] UI风格修改
+- [ ] 难度自定义
+- [ ] 功能按钮自定义
+- [ ] 反馈性动画
+- [ ] ...
+
