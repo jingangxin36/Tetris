@@ -7,7 +7,7 @@ public class DifficultyPanel : BasePanel {
     public Button closeButton;
     public ToggleGroup toggleGroup;
     public GameObject toggleGroupGameObject;
-    private Toggle[] mToggles;
+//    private Toggle[] mToggles;
 
     //todo set speed step
 
@@ -35,16 +35,16 @@ public class DifficultyPanel : BasePanel {
 
         // todo init toggles
 
-        for (int i = 0; i < mToggles.Length; i++) {
-            var index = i;
-            mToggles[i].onValueChanged.AddListener(
-                delegate
-                {
-                    if (mToggles[index].isOn) {
-                        SwitchDifficulty(index);
-                    }
-                });
-        }
+//        for (int i = 0; i < mToggles.Length; i++) {
+//            var index = i;
+//            mToggles[i].onValueChanged.AddListener(
+//                delegate
+//                {
+//                    if (mToggles[index].isOn) {
+//                        SwitchDifficulty(index);
+//                    }
+//                });
+//        }
     }
 
     private void SwitchDifficulty(int index) {

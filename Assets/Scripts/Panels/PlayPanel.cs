@@ -18,7 +18,7 @@ public  class PlayPanel : BasePanel {
     public Button upButton;
     public Button downButton;
 
-    private Sequence mScoreSequence;
+    private readonly Sequence mScoreSequence;
 
 
 
@@ -27,7 +27,7 @@ public  class PlayPanel : BasePanel {
     }
 
     public override BasePanel Show() {
-        //        Debug.Log("Show");
+
         panelType = 0;
         if (!gameObject.activeSelf) {
             gameObject.SetActive(true);
@@ -68,7 +68,10 @@ public  class PlayPanel : BasePanel {
 
 
 
-    private int oldScore = 0;
+    private int mOldScore = 0;
+    public PlayPanel(Sequence scoreSequence) {
+        mScoreSequence = scoreSequence;
+    }
 
     public override void UpdatePanelInfo(int[] info) {
 
@@ -98,8 +101,8 @@ public  class PlayPanel : BasePanel {
         mScoreSequence.Append(DOTween.To(delegate (float value) {
             var temp = Math.Floor(value);
             currentScoreText.text = temp + "";
-        }, oldScore, newScore, 0.4f));
-        oldScore = newScore;
+        }, mOldScore, newScore, 0.4f));
+        mOldScore = newScore;
 //        highestScoreText.text = info[0].ToString();
 
         //todo set tween

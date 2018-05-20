@@ -14,8 +14,7 @@ public static class Vector3Extension {
 
 
 public class Model : MonoBehaviour {
-
-    private const int kScoreStep = 100;
+    public int scoreStep = 5000;
 
     public const int kNormalRows = 20;
     public const int kMaxRows = 22;
@@ -29,8 +28,8 @@ public class Model : MonoBehaviour {
 
     private Transform[,] mMap = new Transform[kMaxColumns, kMaxRows];
     // Use this for initialization
-    void Awake () {
-		LoadData();
+    void Awake() {
+        LoadData();
 
 
     }
@@ -45,7 +44,7 @@ public class Model : MonoBehaviour {
                     return false;
                 }
                 //其它shape
-                if (mMap[(int) position.x, (int) position.y] != null) {
+                if (mMap[(int)position.x, (int)position.y] != null) {
                     return false;
                 }
             }
@@ -61,7 +60,7 @@ public class Model : MonoBehaviour {
         foreach (Transform childTransform in shapeTransform) {
             if (childTransform.tag == "Block") {
                 Vector2 position = childTransform.position.Round();
-                mMap[(int) position.x, (int) position.y] = childTransform;
+                mMap[(int)position.x, (int)position.y] = childTransform;
             }
         }
         //check
@@ -77,11 +76,13 @@ public class Model : MonoBehaviour {
                 Row++;
                 ClearOneRow(i);
                 MoveLines(i + 1);
-                i--;//消除一行之后更新数据
+                i--;
             }
         }
         UpdateScore(count);
-        UpdateLevel();
+        if (count > 0) {
+            UpdateLevel();
+        }
         EventManager.Instance.Fire(UIEvent.REFRESH_SCORE, 0);
     }
 
@@ -98,9 +99,10 @@ public class Model : MonoBehaviour {
     }
 
     private void UpdateLevel() {
-        var tempLevel = Score / kScoreStep;
+        //todo 升级机制
+        var tempLevel = Score / scoreStep;
         if (tempLevel > Level) {
-            Level = tempLevel;
+            Level ++;
             GameManager.Instance.UpgradeLevel();
         }
     }
@@ -130,7 +132,7 @@ public class Model : MonoBehaviour {
                 }
                 mMap[j, i - 1] = mMap[j, i];
                 mMap[j, i] = null;
-                mMap[j, i -1].position += Vector3.down;
+                mMap[j, i - 1].position += Vector3.down;
 
             }
         }
@@ -139,7 +141,7 @@ public class Model : MonoBehaviour {
     public bool IsGameOver() {
         // if max raw has block
         for (int i = 0; i < kMaxColumns; i++) {
-            if (mMap[i, kMaxRows-2] != null) {
+            if (mMap[i, kMaxRows - 2] != null) {
                 SaveData();
                 return true;
             }
@@ -149,7 +151,7 @@ public class Model : MonoBehaviour {
 
     public int[] GetScoreInfo() {
         //todo 可以改成josn格式
-        return new[] {HighScore, Score, Row, Level};
+        return new[] { HighScore, Score, Row, Level };
     }
 
     private void LoadData() {
