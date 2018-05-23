@@ -49,6 +49,7 @@ public  class PlayPanel : BasePanel {
         leftButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepLeft());
         rightButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepRight());
         upButton.onClick.AddListener(() => GameManager.Instance.currentShape.RotateShape());
+//        Debug.Log(GameManager.Instance.currentShape);
         downButton.onClick.AddListener(() => GameManager.Instance.currentShape.SpeedUp());
         pauseButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.GAME_PAUSE));
     }
@@ -103,7 +104,8 @@ public  class PlayPanel : BasePanel {
             currentScoreText.text = temp + "";
         }, mOldScore, newScore, 0.4f));
         mOldScore = newScore;
-//        highestScoreText.text = info[0].ToString();
+
+        highestScoreText.text = info[0].ToString();
 
         //todo set tween
         currentScoreText.text = info[1].ToString();

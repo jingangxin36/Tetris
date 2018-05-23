@@ -30,18 +30,19 @@ public class SettingPanel : BasePanel {
         panelType = 1;
         stack = true;
         muteButton.onClick.AddListener(() => {
-                mIsMute = !mIsMute;
-                muteImage.enabled = mIsMute;
-                EventManager.Instance.Fire(UIEvent.SET_MUIE, mIsMute);
-            }
+            mIsMute = !mIsMute;
+            muteImage.enabled = mIsMute;
+            EventManager.Instance.Fire(UIEvent.SET_MUIE, mIsMute);
+        }
         );
         closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
-        definedButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_DEFINED_PANEL));
+        //todo 
+        //        definedButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_DEFINED_PANEL));
         difficulityButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_DIFFICULITY_PANEL));
     }
 
     public override void Hide() {
-//        Debug.Log("here");
+        //        Debug.Log("here");
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
         }
@@ -52,6 +53,6 @@ public class SettingPanel : BasePanel {
     }
 
     private void SetClose() {
-        
+
     }
 }

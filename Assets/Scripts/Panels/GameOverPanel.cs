@@ -55,7 +55,7 @@ public class GameOverPanel : BasePanel {
         currentScoreText.text = info[1].ToString();
 
         //set title
-        titleText.text = info[0] == info[1] ? "新纪录!" : "游戏结束";
+        titleText.text = info[0] == info[1] ? "!新纪录!" : "游戏结束";
     }
 
     private void SetClose() {

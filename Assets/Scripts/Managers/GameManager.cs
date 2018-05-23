@@ -16,6 +16,9 @@ public class GameManager : Singleton<GameManager> {
     public Shape[] shapes;
     public Color[] colors;
 
+    public int maxSpeedLevel;
+    private int mCurrentLevel;
+
     protected override void Awake() {
         base.Awake();
         mCurrentSpeed = mInitSpeed;
@@ -84,6 +87,8 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void RestartGame() {
+        mCurrentLevel = 0;
+
         for (int i = 0; i < blockContainer.childCount; i++) {
             var shape = blockContainer.GetChild(i).gameObject;
             Destroy(shape);
@@ -92,6 +97,11 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void UpgradeLevel() {
+        mCurrentLevel++;
+        Debug.Log("mCurrentLevel"+ mCurrentLevel);
+        if (mCurrentLevel > maxSpeedLevel) {
+            return;
+        }
         mCurrentSpeed = currentShape.Upgrade();
         nextShape?.Upgrade();
         //todo rool tip

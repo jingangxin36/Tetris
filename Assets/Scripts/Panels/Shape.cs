@@ -36,7 +36,7 @@ public class Shape : MonoBehaviour {
 
     public float Upgrade() {
         //升级
-        normalStepTime /=2;
+        normalStepTime /=1.5f;
         return normalStepTime;
     }
 

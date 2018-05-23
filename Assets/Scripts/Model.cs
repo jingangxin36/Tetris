@@ -151,6 +151,8 @@ public class Model : MonoBehaviour {
 
     public int[] GetScoreInfo() {
         //todo 可以改成josn格式
+//        Debug.Log(HighScore);
+
         return new[] { HighScore, Score, Row, Level };
     }
 
