@@ -8,11 +8,23 @@
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo1.gif)
 
-## 下载地址:
+
+
+## GitHub项目地址:
+
+[**jingangxin36/Tetris**](https://github.com/jingangxin36/Tetris)
+
+## APK下载地址:
 
 [**MyTetris.apk**](https://github.com/jingangxin36/Tetris/releases/download/V1.1/MyTetris.apk)
 
-## 环境:
+## 使用方法:
+
+- 模拟器: 支持键盘方向键和游戏界面按钮
+- 安卓手机: 直接点击游戏界面按钮
+
+
+## 开发环境:
 
 Unity2018.1
 
