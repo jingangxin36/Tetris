@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class Shape : MonoBehaviour {
@@ -8,14 +9,14 @@ public class Shape : MonoBehaviour {
     private bool mIsPause;
     public float normalStepTime;
     private float mTimer;
-    
+
     private bool mIsSpeedUp;
-    public bool isTest;
+    private bool mIsRocket;
     private const int kMultiple = 20;
 
     // Use this for initialization
     void Awake() {
-        
+
         mPivot = transform.Find("Pivot");
         mControllerInstance = Controller.Instance;
     }
@@ -26,9 +27,15 @@ public class Shape : MonoBehaviour {
             return;
         }
         mTimer += Time.deltaTime;
-        if (mTimer > (mIsSpeedUp? normalStepTime / kMultiple : normalStepTime)) {
-            mTimer = 0;
-            Fall();
+        if (mIsRocket) {
+            Fall(5);
+            EventManager.Instance.Fire(UIEvent.CAMERA_SHAKE);
+        }
+        else {
+            if (mTimer > (mIsSpeedUp ? normalStepTime / kMultiple : normalStepTime)) {
+                mTimer = 0;
+                Fall();
+            }
         }
         //input
         InputControl();
@@ -36,7 +43,7 @@ public class Shape : MonoBehaviour {
 
     public float Upgrade() {
         //升级
-        normalStepTime /=1.5f;
+        normalStepTime /= 1.5f;
         return normalStepTime;
     }
 
@@ -45,7 +52,7 @@ public class Shape : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             StepLeft();
         }
-        else if(Input.GetKeyDown(KeyCode.RightArrow)) {
+        else if (Input.GetKeyDown(KeyCode.RightArrow)) {
             StepRight();
         }
         if (Input.GetKeyDown(KeyCode.UpArrow)) {
@@ -55,6 +62,17 @@ public class Shape : MonoBehaviour {
             SpeedUp();
         }
 
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Rocket();
+        }
+
+    }
+
+    private void Rocket() {
+        if (mIsRocket) {
+            return;
+        }
+        mIsRocket = true;
     }
 
     public void StepLeft() {
@@ -109,25 +127,29 @@ public class Shape : MonoBehaviour {
         }
     }
 
-    private void Fall() {
+    private void Fall(int step = 1) {
+
         var position = transform.position;
-        position.y -= 1;
+        position.y -= step;
         transform.position = position;
         if (mControllerInstance.model.IsShapePositionValid(transform) == false) {
-            position.y += 1;
+            position.y += step;
             transform.position = position;
-            mIsPause = true;
+            if (step == 1) {
+                mIsPause = true;
+                //储存当前数据>>检测是否需要消除行
+                mControllerInstance.model.PlaceShape(transform);
+                //新shape或结束
+                GameManager.Instance.ShapeFallDown();
+            }
+            else {
+                Fall(step - 1);
 
-            //储存当前数据>>检测是否需要消除行
-            mControllerInstance.model.PlaceShape(transform);
-
-            //新shape或结束
-            GameManager.Instance.ShapeFallDown();
+            }
         }
         else {
-                AudioManager.Instance.PlayDrop();
+            AudioManager.Instance.PlayDrop();
         }
-
     }
 
     public void Resume() {

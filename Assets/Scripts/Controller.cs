@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class Controller : Singleton<Controller> {
@@ -12,10 +13,11 @@ public class Controller : Singleton<Controller> {
     public View view;
     //    [HideInInspector]
     //    public CameraManager cameraManager;
-
+    private Vector3 mCameraVector3;
 
     protected override void Awake() {
         base.Awake();
+        mCameraVector3 = Camera.main.transform.position;
         model = GameObject.FindGameObjectWithTag("Model").GetComponent<Model>();
         view = GameObject.FindGameObjectWithTag("View").GetComponent<View>();
         //        cameraManager = GetComponent<CameraManager>();
@@ -34,14 +36,16 @@ public class Controller : Singleton<Controller> {
         mEventManager.Listen(UIEvent.SHOW_ALERT, ShowAlert);
         mEventManager.Listen(UIEvent.SHOW_DEFINED_PANEL, ShowDefinedButtonPanel);
         mEventManager.Listen(UIEvent.SHOW_DIFFICULITY_PANEL, ShowDifficultyPanel);
-//        mEventManager.Listen(UIEvent.UPGRADE_LEVEL, UpgradeLevel);
+        mEventManager.Listen(UIEvent.CAMERA_SHAKE, CameraShake);
     }
 
-//    private void UpgradeLevel(object obj) {
-//        
-//        view.ShowUpdateRoolTip();
-//        model.UpgradeLevel();
-//    }
+    private void CameraShake(object obj) {
+        Camera.main.DOShakePosition(0.05f, new Vector3(0, 0.2f, 0)).SetEase(Ease.Linear).OnComplete(() => {
+            Camera.main.transform.position = mCameraVector3;
+        });
+
+    }
+
 
     private void ShowDifficultyPanel(object obj) {
         view.ShowDifficultyPanel();

@@ -27,8 +27,7 @@ public enum UIEvent
     SHOW_ALERT,
     SHOW_DIFFICULITY_PANEL,
     SHOW_DEFINED_PANEL,
-//    UPGRADE_LEVEL
-
+    CAMERA_SHAKE
 
 }
 

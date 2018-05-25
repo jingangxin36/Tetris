@@ -100,7 +100,7 @@ public class Model : MonoBehaviour {
                 if (firstRowIndex == -1) {
                     firstRowIndex = i;
                 }
-
+                AudioManager.Instance.PlayLineClear();
             }
             if (i == (kMaxRows - 1)) {
                 //if last
@@ -146,7 +146,7 @@ public class Model : MonoBehaviour {
                  .SetEase(Ease.Linear)
                  .OnComplete(() => {
                      mMapMask[firstRowIndex + j1].color = new Color(1, 1, 1, 0);
-                     AudioManager.Instance.PlayLineClear();
+                     
                      for (int i = 0; i < kMaxColumns; i++) {
                          Destroy(mMap[i, firstRowIndex + j1].gameObject);
                          mMap[i, firstRowIndex + j1] = null; //地图要置空呐!!
@@ -173,7 +173,7 @@ public class Model : MonoBehaviour {
                 mMap[j, i - count] = mMap[j, i];
                 mMap[j, i] = null;
                 mMap[j, i - count].position += Vector3.down * count;
-                Debug.Log(mMap[j, i - count].position);
+//                Debug.Log(mMap[j, i - count].position);
             }
         }
     }
