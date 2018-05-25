@@ -68,7 +68,7 @@ public class Shape : MonoBehaviour {
 
     }
 
-    private void Rocket() {
+    public void Rocket() {
         if (mIsRocket) {
             return;
         }

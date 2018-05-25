@@ -17,6 +17,7 @@ public  class PlayPanel : BasePanel {
     public Button rightButton;
     public Button upButton;
     public Button downButton;
+    public Button rocketButton;
 
     private Sequence mScoreSequence;
 
@@ -53,6 +54,7 @@ public  class PlayPanel : BasePanel {
 //        Debug.Log(GameManager.Instance.currentShape);
         downButton.onClick.AddListener(() => GameManager.Instance.currentShape.SpeedUp());
         pauseButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.GAME_PAUSE));
+        rocketButton.onClick.AddListener(() => GameManager.Instance.currentShape.Rocket());
     }
 
     public override void Hide() {
