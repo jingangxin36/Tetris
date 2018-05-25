@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public static class Vector3Extension {
@@ -27,9 +28,30 @@ public class Model : MonoBehaviour {
     private int Level { get; set; }
 
     private Transform[,] mMap = new Transform[kMaxColumns, kMaxRows];
+
+
+    private Sequence mMapSequence;
+    public GameObject mapMaskGameObject;
+    private SpriteRenderer[] mMapMask;
+
+    private bool CheckIsRowFull(int rowIndex) {
+        for (int i = 0; i < kMaxColumns; i++) {
+            if (mMap[i, rowIndex] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     // Use this for initialization
     void Awake() {
         LoadData();
+        mMapSequence = DOTween.Sequence();
+        mMapSequence.SetAutoKill(false);
+        mMapMask = mapMaskGameObject.GetComponentsInChildren<SpriteRenderer>();
+
+        //        mMapSequence.Append(mMapMask[1].DOFade(0, 0.3f).SetLoops(10).SetEase(Ease.Linear));
 
 
     }
@@ -69,14 +91,23 @@ public class Model : MonoBehaviour {
 
     public void CheckMap() {
         int count = 0;//计算行数和分数
+        int firstRowIndex = -1;
         for (int i = 0; i < kMaxRows; i++) {
             bool isFull = CheckIsRowFull(i);
             if (isFull) {
                 count++;
                 Row++;
-                ClearOneRow(i);
-                MoveLines(i + 1);
-                i--;
+                if (firstRowIndex == -1) {
+                    firstRowIndex = i;
+                }
+
+            }
+            if (i == (kMaxRows - 1)) {
+                //if last
+                if (firstRowIndex != -1) {
+                    GameManager.Instance.PauseGame();
+                    ClearOneRow(firstRowIndex, count);
+                }
             }
         }
         UpdateScore(count);
@@ -102,38 +133,47 @@ public class Model : MonoBehaviour {
         //todo 升级机制
         var tempLevel = Score / scoreStep;
         if (tempLevel > Level) {
-            Level ++;
+            Level++;
             GameManager.Instance.UpgradeLevel();
         }
     }
 
-    private bool CheckIsRowFull(int rowIndex) {
-        for (int i = 0; i < kMaxColumns; i++) {
-            if (mMap[i, rowIndex] == null) {
-                return false;
-            }
+    private void ClearOneRow(int firstRowIndex, int count) {
+        for (int j = 0; j < count; j++) {
+            var j1 = j;
+            mMapMask[firstRowIndex + j].DOFade(1, 0.2f)
+                 .SetLoops(4)
+                 .SetEase(Ease.Linear)
+                 .OnComplete(() => {
+                     mMapMask[firstRowIndex + j1].color = new Color(1, 1, 1, 0);
+                     AudioManager.Instance.PlayLineClear();
+                     for (int i = 0; i < kMaxColumns; i++) {
+                         Destroy(mMap[i, firstRowIndex + j1].gameObject);
+                         mMap[i, firstRowIndex + j1] = null; //地图要置空呐!!
+                         }
+                     if (j1 == count - 1) {
+                         MoveLines(firstRowIndex, count);
+                         GameManager.Instance.StartGame();
+
+                     }
+                 });
         }
-        return true;
+
+
     }
 
-    private void ClearOneRow(int rowIndex) {
-        AudioManager.Instance.PlayLineClear();
-        for (int i = 0; i < kMaxColumns; i++) {
-            Destroy(mMap[i, rowIndex].gameObject);
-            mMap[i, rowIndex] = null;//地图要置空呐!!
-        }
-    }
-
-    private void MoveLines(int lineIndex) {
-        for (int i = lineIndex; i < kNormalRows; i++) {
+    private void MoveLines(int lineIndex, int count) {
+        for (int i = lineIndex + count; i < kNormalRows; i++) {
             for (int j = 0; j < kMaxColumns; j++) {
                 if (mMap[j, i] == null) {
                     continue;
                 }
-                mMap[j, i - 1] = mMap[j, i];
-                mMap[j, i] = null;
-                mMap[j, i - 1].position += Vector3.down;
+//                Debug.Log(mMap[j, i - count].position);
 
+                mMap[j, i - count] = mMap[j, i];
+                mMap[j, i] = null;
+                mMap[j, i - count].position += Vector3.down * count;
+                Debug.Log(mMap[j, i - count].position);
             }
         }
     }
@@ -151,7 +191,7 @@ public class Model : MonoBehaviour {
 
     public int[] GetScoreInfo() {
         //todo 可以改成josn格式
-//        Debug.Log(HighScore);
+        //        Debug.Log(HighScore);
 
         return new[] { HighScore, Score, Row, Level };
     }

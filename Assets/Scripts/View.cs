@@ -17,41 +17,6 @@ public class View : MonoBehaviour {
 
     }
 
-    private void Test() {
-        var stack = new MyStack<int>();
-        stack.Push(1);
-        stack.Push(2);
-        stack.Push(3);
-        foreach (var temp in stack) {
-            Debug.Log(temp); //1,2,3
-        }
-        Debug.Log(stack.Peek());//3
-        stack.Remove(2);
-        foreach (var temp in stack) {
-            Debug.Log("here");
-            Debug.Log(temp.ToString());//1,3
-        }
-        Debug.Log(stack.IsEmpty());
-
-        Debug.Log(stack.Size);
-        Debug.Log(stack.Peek());//3
-
-        foreach (var temp in stack) {
-            Debug.Log(temp);//1
-        }
-
-        for (int i = 1; i < 20; i++) {
-            stack.Push(i);
-        }
-        foreach (var temp in stack) {
-            Debug.Log(temp);//1
-        }
-        stack.Clear();
-        Debug.Log(stack.Size);
-        Debug.Log(stack.IsEmpty());
-
-    }
-
     // Update is called once per frame
     void Update() {
 

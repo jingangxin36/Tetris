@@ -18,7 +18,7 @@ public  class PlayPanel : BasePanel {
     public Button upButton;
     public Button downButton;
 
-    private readonly Sequence mScoreSequence;
+    private Sequence mScoreSequence;
 
 
 
@@ -45,6 +45,7 @@ public  class PlayPanel : BasePanel {
 
     public override void Init() {
         panelType = 0;
+        mScoreSequence = DOTween.Sequence();
         mScoreSequence.SetAutoKill(false);
         leftButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepLeft());
         rightButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepRight());
@@ -70,9 +71,7 @@ public  class PlayPanel : BasePanel {
 
 
     private int mOldScore = 0;
-    public PlayPanel(Sequence scoreSequence) {
-        mScoreSequence = scoreSequence;
-    }
+
 
     public override void UpdatePanelInfo(int[] info) {
 

@@ -98,7 +98,7 @@ public class GameManager : Singleton<GameManager> {
 
     public void UpgradeLevel() {
         mCurrentLevel++;
-        Debug.Log("mCurrentLevel"+ mCurrentLevel);
+//        Debug.Log("mCurrentLevel"+ mCurrentLevel);
         if (mCurrentLevel > maxSpeedLevel) {
             return;
         }
