@@ -1,9 +1,6 @@
 ﻿
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using UnityEngine;
 using UnityEngine.UI;
 
 public  class PlayPanel : BasePanel {
@@ -33,9 +30,6 @@ public  class PlayPanel : BasePanel {
         if (!gameObject.activeSelf) {
             gameObject.SetActive(true);
         }
-        //gameManager.start(isRestart)
-//        EventManager.Instance.Fire(UIEvent.ENTER_PLAY_STATE, isRestart);
-        //fire begin game(isRestart)
         currentScoreText.text = "0";
         highestScoreText.text = "0";
         rowText.text = "0";
@@ -51,23 +45,19 @@ public  class PlayPanel : BasePanel {
         leftButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepLeft());
         rightButton.onClick.AddListener(() => GameManager.Instance.currentShape.StepRight());
         upButton.onClick.AddListener(() => GameManager.Instance.currentShape.RotateShape());
-//        Debug.Log(GameManager.Instance.currentShape);
         downButton.onClick.AddListener(() => GameManager.Instance.currentShape.SpeedUp());
         pauseButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.GAME_PAUSE));
         rocketButton.onClick.AddListener(() => GameManager.Instance.currentShape.Rocket());
     }
 
     public override void Hide() {
-
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
-            currentScoreText.text = "";
-            highestScoreText.text = "";
         }
     }
 
     public override void Destroy() {
-        throw new System.NotImplementedException();
+
     }
 
 
@@ -76,30 +66,17 @@ public  class PlayPanel : BasePanel {
 
 
     public override void UpdatePanelInfo(int[] info) {
-
-
         //update data
         //info[0]>>highest score
         //info[1]>>current score
         //info[2]>>row
         //info[3]>>level
 
-        //todo check
         if (info == null || info.Length == 0) {
             return;
         }
-        //        foreach (var i in info) {
-        //            Debug.Log(i);
-        //        }
 
         int newScore = info[1];
-//        mScoreSequence.Append(DOTween.To(delegate (){
-//            return 0.0f;
-//        }, delegate(double value) {
-//            var temp = Math.Floor(value);
-//            currentScoreText.text = temp + "";
-//
-//        }, oldScore, newScore, 0.6));
         mScoreSequence.Append(DOTween.To(delegate (float value) {
             var temp = Math.Floor(value);
             currentScoreText.text = temp + "";
@@ -107,21 +84,9 @@ public  class PlayPanel : BasePanel {
         mOldScore = newScore;
 
         highestScoreText.text = info[0].ToString();
-
-        //todo set tween
         currentScoreText.text = info[1].ToString();
-        //todo set tween
         rowText.text = info[2].ToString();
-        //todo set tween
         levelText.text = info[3].ToString();
 
     }
-
-
-
-//    private Tweener SetRollNumberText() {
-//        
-//    }
-
-
 }

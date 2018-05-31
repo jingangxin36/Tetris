@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 public class AlertPanel : BasePanel {
     public Button closeButton;
@@ -11,10 +8,6 @@ public class AlertPanel : BasePanel {
 
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
 
     public override BasePanel Show() {
         if (!gameObject.activeSelf) {
@@ -35,6 +28,5 @@ public class AlertPanel : BasePanel {
     }
 
     public override void Destroy() {
-        throw new System.NotImplementedException();
     }
 }

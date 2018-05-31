@@ -16,9 +16,9 @@ public class RankPanel : BasePanel {
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update() {
+
+    }
 
     public override BasePanel Show() {
         if (!gameObject.activeSelf) {
@@ -30,11 +30,10 @@ public class RankPanel : BasePanel {
 
     public override void Init() {
         panelType = 2;
-//        clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.CLEAR_DATA));
+        //        clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.CLEAR_DATA));
         clearButton.onClick.AddListener(() => EventManager.Instance.Fire(UIEvent.SHOW_ALERT));
 
         closeButton.onClick.AddListener(() => UIManager.Instance.SetClose(this));
-        stack = true;
     }
 
     public override void Hide() {

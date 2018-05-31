@@ -10,12 +10,12 @@ public class SettingPanel : BasePanel {
     public Button difficulityButton;
     public Image muteImage;
     private bool mIsMute;
+
     void Awake() {
         Init();
     }
 
-    // Update is called once per frame
-    void Update() {
+    private void SetClose() {
 
     }
 
@@ -42,17 +42,12 @@ public class SettingPanel : BasePanel {
     }
 
     public override void Hide() {
-        //        Debug.Log("here");
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
         }
     }
 
     public override void Destroy() {
-        throw new System.NotImplementedException();
-    }
-
-    private void SetClose() {
 
     }
 }

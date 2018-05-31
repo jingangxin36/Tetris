@@ -12,6 +12,7 @@ public class Shape : MonoBehaviour {
 
     private bool mIsSpeedUp;
     private bool mIsRocket;
+    private bool mHasRocket;
     private const int kMultiple = 20;
 
     // Use this for initialization
@@ -29,7 +30,10 @@ public class Shape : MonoBehaviour {
         mTimer += Time.deltaTime;
         if (mIsRocket) {
             Fall(5);
-            EventManager.Instance.Fire(UIEvent.CAMERA_SHAKE);
+            if (!mHasRocket) {
+                EventManager.Instance.Fire(UIEvent.CAMERA_SHAKE);
+                mHasRocket = true;
+            }
         }
         else {
             if (mTimer > (mIsSpeedUp ? normalStepTime / kMultiple : normalStepTime)) {
@@ -109,6 +113,7 @@ public class Shape : MonoBehaviour {
     }
 
     public void SpeedUp() {
+        //        Debug.Log("SpeedUp");
         if (mIsSpeedUp) {
             return;
         }

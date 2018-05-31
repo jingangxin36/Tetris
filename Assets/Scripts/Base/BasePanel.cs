@@ -14,17 +14,19 @@ public abstract class BasePanel : MonoBehaviour {
     [HideInInspector]
     public bool stack = false;
 
+
+    public abstract BasePanel Show();
+
     /// <summary>
     /// 更新数据
     /// </summary>
-    /// <param name="isRestart"></param>
-    /// <returns></returns>
-    public abstract BasePanel Show();
     public virtual void UpdatePanelInfo(int[] info) {}
+
     /// <summary>
     /// 数据初始化, 按钮监听
     /// </summary>
     public abstract void Init();
+
     /// <summary>
     /// 隐藏 + (栈pop) 
     /// </summary>

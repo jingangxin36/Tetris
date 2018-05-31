@@ -4,8 +4,6 @@ using DG.Tweening;
 using UnityEngine;
 
 public static class Vector3Extension {
-
-
     public static Vector2 Round(this Vector3 v) {
         int x = Mathf.RoundToInt(v.x);
         int y = Mathf.RoundToInt(v.y);
@@ -15,46 +13,22 @@ public static class Vector3Extension {
 
 
 public class Model : MonoBehaviour {
+    /// <summary>
+    /// 升级的分数间隔, 每个scoreStep升级一次
+    /// </summary>
     public int scoreStep = 5000;
-
     public const int kNormalRows = 20;
     public const int kMaxRows = 22;
     public const int kMaxColumns = 10;
+    public GameObject mapMaskGameObject;
 
+    private SpriteRenderer[] mMapMask;
+    private Transform[,] mMap = new Transform[kMaxColumns, kMaxRows];
+    private Sequence mMapSequence;
+    private int Row { get; set; }
+    private int Level { get; set; }
     private int Score { get; set; }
     private int HighScore { get; set; }
-    private int Row { get; set; }
-
-    private int Level { get; set; }
-
-    private Transform[,] mMap = new Transform[kMaxColumns, kMaxRows];
-
-
-    private Sequence mMapSequence;
-    public GameObject mapMaskGameObject;
-    private SpriteRenderer[] mMapMask;
-
-    private bool CheckIsRowFull(int rowIndex) {
-        for (int i = 0; i < kMaxColumns; i++) {
-            if (mMap[i, rowIndex] == null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    // Use this for initialization
-    void Awake() {
-        LoadData();
-        mMapSequence = DOTween.Sequence();
-        mMapSequence.SetAutoKill(false);
-        mMapMask = mapMaskGameObject.GetComponentsInChildren<SpriteRenderer>();
-
-        //        mMapSequence.Append(mMapMask[1].DOFade(0, 0.3f).SetLoops(10).SetEase(Ease.Linear));
-
-
-    }
 
 
     public bool IsShapePositionValid(Transform shapeTransform) {
@@ -74,10 +48,6 @@ public class Model : MonoBehaviour {
         return true;
     }
 
-    private bool IsInsideMap(Vector2 position) {
-        return position.x >= 0 && position.x < kMaxColumns && position.y >= 0;
-    }
-
     public void PlaceShape(Transform shapeTransform) {
         foreach (Transform childTransform in shapeTransform) {
             if (childTransform.tag == "Block") {
@@ -85,7 +55,6 @@ public class Model : MonoBehaviour {
                 mMap[(int)position.x, (int)position.y] = childTransform;
             }
         }
-        //check
         CheckMap();
     }
 
@@ -102,9 +71,11 @@ public class Model : MonoBehaviour {
                 }
                 AudioManager.Instance.PlayLineClear();
             }
+            //如果到最后一行
             if (i == (kMaxRows - 1)) {
-                //if last
+                //如果有行消除
                 if (firstRowIndex != -1) {
+                    //暂停游戏, 阻止方块下落
                     GameManager.Instance.PauseGame();
                     ClearOneRow(firstRowIndex, count);
                 }
@@ -117,69 +88,8 @@ public class Model : MonoBehaviour {
         EventManager.Instance.Fire(UIEvent.REFRESH_SCORE, 0);
     }
 
-    private void UpdateScore(int count) {
-        if (count == 0) {
-            Score += 20;
-        }
-        else {
-            Score += count * 1000;
-        }
-        if (Score > HighScore) {
-            HighScore = Score;
-        }
-    }
-
-    private void UpdateLevel() {
-        //todo 升级机制
-        var tempLevel = Score / scoreStep;
-        if (tempLevel > Level) {
-            Level++;
-            GameManager.Instance.UpgradeLevel();
-        }
-    }
-
-    private void ClearOneRow(int firstRowIndex, int count) {
-        for (int j = 0; j < count; j++) {
-            var j1 = j;
-            mMapMask[firstRowIndex + j].DOFade(1, 0.2f)
-                 .SetLoops(4)
-                 .SetEase(Ease.Linear)
-                 .OnComplete(() => {
-                     mMapMask[firstRowIndex + j1].color = new Color(1, 1, 1, 0);
-                     
-                     for (int i = 0; i < kMaxColumns; i++) {
-                         Destroy(mMap[i, firstRowIndex + j1].gameObject);
-                         mMap[i, firstRowIndex + j1] = null; //地图要置空呐!!
-                         }
-                     if (j1 == count - 1) {
-                         MoveLines(firstRowIndex, count);
-                         GameManager.Instance.StartGame();
-
-                     }
-                 });
-        }
-
-
-    }
-
-    private void MoveLines(int lineIndex, int count) {
-        for (int i = lineIndex + count; i < kNormalRows; i++) {
-            for (int j = 0; j < kMaxColumns; j++) {
-                if (mMap[j, i] == null) {
-                    continue;
-                }
-//                Debug.Log(mMap[j, i - count].position);
-
-                mMap[j, i - count] = mMap[j, i];
-                mMap[j, i] = null;
-                mMap[j, i - count].position += Vector3.down * count;
-//                Debug.Log(mMap[j, i - count].position);
-            }
-        }
-    }
-
     public bool IsGameOver() {
-        // if max raw has block
+        //如果最上面一行有方块
         for (int i = 0; i < kMaxColumns; i++) {
             if (mMap[i, kMaxRows - 2] != null) {
                 SaveData();
@@ -190,18 +100,8 @@ public class Model : MonoBehaviour {
     }
 
     public int[] GetScoreInfo() {
-        //todo 可以改成josn格式
-        //        Debug.Log(HighScore);
-
+        //todo 可以改成josn格式??
         return new[] { HighScore, Score, Row, Level };
-    }
-
-    private void LoadData() {
-        HighScore = PlayerPrefs.GetInt("HighestScore", 0);
-    }
-
-    private void SaveData() {
-        PlayerPrefs.SetInt("HighestScore", HighScore);
     }
 
 
@@ -224,5 +124,90 @@ public class Model : MonoBehaviour {
 
     }
 
+    void Awake() {
+        LoadData();
+        mMapSequence = DOTween.Sequence();
+        mMapSequence.SetAutoKill(false);
+        mMapMask = mapMaskGameObject.GetComponentsInChildren<SpriteRenderer>();
+    }
 
+    private bool CheckIsRowFull(int rowIndex) {
+        for (int i = 0; i < kMaxColumns; i++) {
+            if (mMap[i, rowIndex] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool IsInsideMap(Vector2 position) {
+        return position.x >= 0 && position.x < kMaxColumns && position.y >= 0;
+    }
+
+    private void UpdateScore(int count) {
+        if (count == 0) {
+            Score += 20;
+        }
+        else {
+            Score += count * 1000;
+        }
+        if (Score > HighScore) {
+            HighScore = Score;
+        }
+    }
+
+    private void UpdateLevel() {
+        var tempLevel = Score / scoreStep;
+        if (tempLevel > Level) {
+            Level = tempLevel;
+            GameManager.Instance.UpgradeLevel();
+        }
+    }
+
+    private void ClearOneRow(int firstRowIndex, int count) {
+        for (int j = 0; j < count; j++) {
+            var j1 = j;
+            //行消除动画
+            mMapMask[firstRowIndex + j].DOFade(1, 0.2f)
+                .SetLoops(4)
+                .SetEase(Ease.Linear)
+                .OnComplete(() => {
+                    mMapMask[firstRowIndex + j1].color = new Color(1, 1, 1, 0);
+                    for (int i = 0; i < kMaxColumns; i++) {
+                        Destroy(mMap[i, firstRowIndex + j1].gameObject);
+                        //地图要置空
+                        mMap[i, firstRowIndex + j1] = null;
+                    }
+                    if (j1 == count - 1) {
+                        MoveLines(firstRowIndex, count);
+                        GameManager.Instance.StartGame();
+                    }
+                });
+        }
+    }
+    /// <summary>
+    /// 剩下的方块往下挪
+    /// </summary>
+    /// <param name="lineIndex"></param>
+    /// <param name="count"></param>
+    private void MoveLines(int lineIndex, int count) {
+        for (int i = lineIndex + count; i < kNormalRows; i++) {
+            for (int j = 0; j < kMaxColumns; j++) {
+                if (mMap[j, i] == null) {
+                    continue;
+                }
+                mMap[j, i - count] = mMap[j, i];
+                mMap[j, i] = null;
+                mMap[j, i - count].position += Vector3.down * count;
+            }
+        }
+    }
+
+    private void LoadData() {
+        HighScore = PlayerPrefs.GetInt("HighestScore", 0);
+    }
+
+    private void SaveData() {
+        PlayerPrefs.SetInt("HighestScore", HighScore);
+    }
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : Singleton<AudioManager> {
-
-
     public AudioClip cursor;
     public AudioClip drop;
     public AudioClip control;

@@ -5,14 +5,13 @@ using DG.Tweening;
 using UnityEngine;
 
 public class Controller : Singleton<Controller> {
-    private EventManager mEventManager;
     //also used in other class
     [HideInInspector]
     public Model model;
     [HideInInspector]
     public View view;
-    //    [HideInInspector]
-    //    public CameraManager cameraManager;
+
+    private EventManager mEventManager;
     private Vector3 mCameraVector3;
 
     protected override void Awake() {
@@ -20,13 +19,8 @@ public class Controller : Singleton<Controller> {
         mCameraVector3 = Camera.main.transform.position;
         model = GameObject.FindGameObjectWithTag("Model").GetComponent<Model>();
         view = GameObject.FindGameObjectWithTag("View").GetComponent<View>();
-        //        cameraManager = GetComponent<CameraManager>();
-
         mEventManager = EventManager.Instance;
         mEventManager.Listen(UIEvent.ENTER_PLAY_STATE, EnterPlayState);
-
-
-//new
         mEventManager.Listen(UIEvent.GET_SCORE_INFO, GetScoreInfo);
         mEventManager.Listen(UIEvent.GAME_PAUSE, GamePause);
         mEventManager.Listen(UIEvent.GAME_OVER, GameOver);
@@ -43,9 +37,7 @@ public class Controller : Singleton<Controller> {
         Camera.main.DOShakePosition(0.05f, new Vector3(0, 0.2f, 0)).SetEase(Ease.Linear).OnComplete(() => {
             Camera.main.transform.position = mCameraVector3;
         });
-
     }
-
 
     private void ShowDifficultyPanel(object obj) {
         view.ShowDifficultyPanel();
@@ -54,7 +46,6 @@ public class Controller : Singleton<Controller> {
 
     private void ShowDefinedButtonPanel(object obj) {
         view.ShowDefinedButtonPanel();
-
     }
 
     private void ShowAlert(object obj = null) {
@@ -74,7 +65,6 @@ public class Controller : Singleton<Controller> {
     }
 
     private void GameOver(object obj = null) {
-        
         view.GameOver();
     }
 
@@ -84,37 +74,16 @@ public class Controller : Singleton<Controller> {
     }
 
     private void GetScoreInfo(object obj = null) {
-//        Debug.Log(obj);
         int panelType = (int)obj;
         view.UpdatePanelInfo(panelType, model.GetScoreInfo());
     }
 
-
-    private void Start() {
-    }
-
-
-
-    void Update() {
-
-    }
-
-
-
-
     private void EnterPlayState(object obj = null) {
-        /*
-        ctrl.view.ShowGameUI(ctrl.model.Score,ctrl.model.HighScore);
-        ctrl.cameraManager.ZoomIn();
-        ctrl.gameManager.StartGame();
-         */
         var isRestart = (bool)obj;
         if (isRestart) {
             model.RefreshGame();
         }
         GameManager.Instance.StartGame();
-
-        //if restart model.clear shape&data
     }
 
 

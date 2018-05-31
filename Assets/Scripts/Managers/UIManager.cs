@@ -7,11 +7,7 @@ public class UIManager : Singleton<UIManager> {
     private readonly UICompositor mStackCompositor = new UICompositor(sPanelStack);
 
     public void SetClose(BasePanel targetPanel) {
-        //todo stack pop + destroy
-//                Debug.Log("stack pop + destroy" + targetPanel.gameObject);
         mStackCompositor.PopPanel();
-
-
     }
 
     public BasePanel ShowOne(BasePanel targetPanel) {
@@ -20,7 +16,7 @@ public class UIManager : Singleton<UIManager> {
     }
 
     /// <summary>
-    /// 现在还没不需要用到....
+    /// 在一个窗口上面再叠加一个窗口, 现在还没不需要用到....
     /// </summary>
     /// <param name="targetPanel"></param>
     public void ShowMore(BasePanel targetPanel) {

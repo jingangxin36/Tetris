@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -35,7 +32,6 @@ public class GameOverPanel : BasePanel {
         highestScoreText.text = "";
         currentScoreText.text = "";
         titleText.text = "";
-
         if (gameObject.activeSelf) {
             gameObject.SetActive(false);
         }
@@ -53,8 +49,6 @@ public class GameOverPanel : BasePanel {
         }
         highestScoreText.text = info[0].ToString();
         currentScoreText.text = info[1].ToString();
-
-        //set title
         titleText.text = info[0] == info[1] ? "!新纪录!" : "游戏结束";
     }
 

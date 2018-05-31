@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
-
-    private bool mIsPause = true;//游戏是否暂停
     [HideInInspector]
     public Shape currentShape;
     [HideInInspector]
     public Shape nextShape;
-    private float mInitSpeed = 0.8f;
-    private float mCurrentSpeed;
 
     public Transform blockContainer;
     public Shape[] shapes;
     public Color[] colors;
-
     public int maxSpeedLevel;
+
+    private bool mIsPause = true;//游戏是否暂停
+    private float mInitSpeed = 0.8f;
+    private float mCurrentSpeed;
     private int mCurrentLevel;
 
     protected override void Awake() {
@@ -98,14 +97,11 @@ public class GameManager : Singleton<GameManager> {
 
     public void UpgradeLevel() {
         mCurrentLevel++;
-//        Debug.Log("mCurrentLevel"+ mCurrentLevel);
         if (mCurrentLevel > maxSpeedLevel) {
             return;
         }
         mCurrentSpeed = currentShape.Upgrade();
         nextShape?.Upgrade();
-        //todo rool tip
-//        EventManager.Instance.Fire(UIEvent.UPGRADE_LEVEL);
         Controller.Instance.view.ShowUpdateRoolTip();
     }
 

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class View : MonoBehaviour {
     public GameObject menuTabbar;
@@ -11,51 +8,37 @@ public class View : MonoBehaviour {
     private BasePanel mCurrentPanel;
 
     private bool mIsGameOver;
-
-    // Use this for initialization
-    void Awake() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
+    /// <summary>
+    /// 按钮按下时传index, index为该面板在数组panels的索引, 在Inspector窗口查看
+    /// </summary>
+    /// <param name="index"></param>
     public void TabbarOnTab(int index) {
-        //game over and isRestart
-//        mCurrentPanel?.Hide();//TODO
         HidePanel(mCurrentPanel);
+        //如果是restart或play按钮
         if (index == 0 || index == -1) {
             bool isRestart;
             //restart
             if (index == 0) {
                 isRestart = true;
                 GameManager.Instance.ResetSpeed();
-
             }
             //start or continue
             else {
-
                 if (mIsGameOver) {
                     isRestart = true;
-
                     mIsGameOver = false;
                 }
                 else {
                     isRestart = false;
-
                 }
             }
-            mCurrentPanel = UIManager.Instance. ShowOne(panels[0]);
+            mCurrentPanel = UIManager.Instance.ShowOne(panels[0]);
             HideMenuTabbar();
             EventManager.Instance.Fire(UIEvent.ENTER_PLAY_STATE, isRestart);
         }
         else {
             mCurrentPanel = UIManager.Instance.ShowOne(panels[index]);
         }
-        //todo 应该不用fire新数据吧
-//        EventManager.Instance.Fire(UIEvent.GET_SCORE_INFO, index);
         AudioManager.Instance.PlayCursor();
     }
 
@@ -65,13 +48,9 @@ public class View : MonoBehaviour {
     }
 
     public void PauseGame() {
-
         ShowMenuTabbar();
-//        panels[0].Hide();//TODO
         HidePanel(panels[0]);
-
         AudioManager.Instance.PlayCursor();
-
     }
 
     public void ShowMenuTabbar() {
@@ -83,17 +62,10 @@ public class View : MonoBehaviour {
         menuTabbar.SetActive(false);
     }
 
-
-
-
-
     public void GameOver() {
         //hide start button
         mIsGameOver = true;
         ShowMenuTabbar();
-        //hide play panel
-
-        //show over panel
         TabbarOnTab(3);
 
     }
@@ -108,19 +80,17 @@ public class View : MonoBehaviour {
         UIManager.Instance.ShowOne(panels[4]);
     }
 
-    private void HidePanel(BasePanel targetPanel) {
-        if (targetPanel != null) {
-            UIManager.Instance.SetClose(targetPanel);
-        }
-    }
-
     public void ShowDifficultyPanel() {
         UIManager.Instance.ShowOne(panels[6]);
-
     }
 
     public void ShowDefinedButtonPanel() {
         UIManager.Instance.ShowOne(panels[5]);
+    }
 
+    private void HidePanel(BasePanel targetPanel) {
+        if (targetPanel != null) {
+            UIManager.Instance.SetClose(targetPanel);
+        }
     }
 }
