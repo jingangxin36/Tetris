@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 public class Controller : Singleton<Controller> {
     //also used in other class
@@ -54,12 +55,14 @@ public class Controller : Singleton<Controller> {
 
 
     private void SetMute(object obj = null) {
+        Debug.Assert(obj != null, nameof(obj) + " != null");
         var isMute = (bool)obj;
         AudioManager.Instance.SetMute(isMute);
     }
 
     private void ClearData(object obj = null) {
-        int panelType = (int)obj;
+        Debug.Assert(obj != null, nameof(obj) + " != null");
+        var panelType = (int)obj;
         model.ClearData();
         view.UpdatePanelInfo(panelType, model.GetScoreInfo());
     }
@@ -74,11 +77,13 @@ public class Controller : Singleton<Controller> {
     }
 
     private void GetScoreInfo(object obj = null) {
-        int panelType = (int)obj;
+        Debug.Assert(obj != null, nameof(obj) + " != null");
+        var panelType = (int)obj;
         view.UpdatePanelInfo(panelType, model.GetScoreInfo());
     }
 
     private void EnterPlayState(object obj = null) {
+        Debug.Assert(obj != null, nameof(obj) + " != null");
         var isRestart = (bool)obj;
         if (isRestart) {
             model.RefreshGame();

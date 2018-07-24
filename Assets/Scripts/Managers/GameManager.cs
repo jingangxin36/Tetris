@@ -101,13 +101,23 @@ public class GameManager : Singleton<GameManager> {
             return;
         }
         mCurrentSpeed = currentShape.Upgrade();
-        nextShape?.Upgrade();
+        if (nextShape != null)
+        {
+            nextShape.Upgrade();
+        }
         Controller.Instance.view.ShowUpdateRoolTip();
     }
 
     public void ResetSpeed() {
-        currentShape?.SetSpeed(mInitSpeed);
-        nextShape?.SetSpeed(mInitSpeed);
+        if (currentShape != null)
+        {
+            currentShape.SetSpeed(mInitSpeed);
+        }
+
+        if (nextShape != null)
+        {
+            nextShape.SetSpeed(mInitSpeed);
+        }
         mCurrentSpeed = mInitSpeed;
     }
 }

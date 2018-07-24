@@ -6,8 +6,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
 
     public static T Instance => instance;
 
-    public static bool InstanceExists => instance != null;
-
     protected virtual void Awake() {
         if (Instance == null) {
             instance = GetComponent<T>();

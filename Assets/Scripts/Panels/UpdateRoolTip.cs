@@ -12,12 +12,11 @@ public class UpdateRoolTip : MonoBehaviour {
 	        return;
 	    }
         mTimer += Time.deltaTime;
-        if (mTimer > kShowTime) {
-            mTimer = 0;
-            gameObject.SetActive(false);
-            mIsShow = false;
-        }
-    }
+	    if (!(mTimer > kShowTime)) return;
+	    mTimer = 0;
+	    gameObject.SetActive(false);
+	    mIsShow = false;
+	}
 
     void OnEnable() {
         mIsShow = true;

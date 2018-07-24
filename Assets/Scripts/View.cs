@@ -44,7 +44,10 @@ public class View : MonoBehaviour {
 
     public void UpdatePanelInfo(int panelType, int[] info) {
         mCurrentPanel = panels[panelType];
-        mCurrentPanel?.UpdatePanelInfo(info);
+        if (mCurrentPanel!=null)
+        {
+            mCurrentPanel.UpdatePanelInfo(info);
+        }
     }
 
     public void PauseGame() {
@@ -88,7 +91,7 @@ public class View : MonoBehaviour {
         UIManager.Instance.ShowOne(panels[5]);
     }
 
-    private void HidePanel(BasePanel targetPanel) {
+    private static void HidePanel(BasePanel targetPanel) {
         if (targetPanel != null) {
             UIManager.Instance.SetClose(targetPanel);
         }

@@ -33,7 +33,7 @@ public class Model : MonoBehaviour {
 
     public bool IsShapePositionValid(Transform shapeTransform) {
         foreach (Transform childTransform in shapeTransform) {
-            if (childTransform.tag == "Block") {
+            if (childTransform.CompareTag("Block")) {
                 Vector2 position = childTransform.position.Round();
                 //地图边界
                 if (IsInsideMap(position) == false) {
@@ -50,7 +50,7 @@ public class Model : MonoBehaviour {
 
     public void PlaceShape(Transform shapeTransform) {
         foreach (Transform childTransform in shapeTransform) {
-            if (childTransform.tag == "Block") {
+            if (childTransform.CompareTag("Block")) {
                 Vector2 position = childTransform.position.Round();
                 mMap[(int)position.x, (int)position.y] = childTransform;
             }

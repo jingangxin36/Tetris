@@ -132,28 +132,37 @@ public class Shape : MonoBehaviour {
         }
     }
 
-    private void Fall(int step = 1) {
-
-        var position = transform.position;
-        position.y -= step;
-        transform.position = position;
-        if (mControllerInstance.model.IsShapePositionValid(transform) == false) {
-            position.y += step;
+    private void Fall(int step = 1)
+    {
+        while (true)
+        {
+            var position = transform.position;
+            position.y -= step;
             transform.position = position;
-            if (step == 1) {
-                mIsPause = true;
-                //储存当前数据>>检测是否需要消除行
-                mControllerInstance.model.PlaceShape(transform);
-                //新shape或结束
-                GameManager.Instance.ShapeFallDown();
+            if (mControllerInstance.model.IsShapePositionValid(transform) == false)
+            {
+                position.y += step;
+                transform.position = position;
+                if (step == 1)
+                {
+                    mIsPause = true;
+                    //储存当前数据>>检测是否需要消除行
+                    mControllerInstance.model.PlaceShape(transform);
+                    //新shape或结束
+                    GameManager.Instance.ShapeFallDown();
+                }
+                else
+                {
+                    step = step - 1;
+                    continue;
+                }
             }
-            else {
-                Fall(step - 1);
+            else
+            {
+                AudioManager.Instance.PlayDrop();
+            }
 
-            }
-        }
-        else {
-            AudioManager.Instance.PlayDrop();
+            break;
         }
     }
 
@@ -169,7 +178,7 @@ public class Shape : MonoBehaviour {
 
         //YOUNG 遍历
         foreach (Transform block in transform) {
-            if (block.tag == "Block") {
+            if (block.CompareTag("Block")) {
                 block.GetComponent<SpriteRenderer>().color = color;
             }
         }
