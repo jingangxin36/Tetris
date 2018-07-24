@@ -66,15 +66,74 @@ public enum UIEvent {
 }
 ```
 
+### UI面板切换的分类管理
 
+ui面板的切换有两种需求, 情况如下
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/面板管理.jpg)
+
+- 新窗口关闭时, 自动打开旧窗口
+- 新窗口关闭时, 直接回到主界面
+
+项目中使用一个自定义栈`MyStack`来存储管理面板,  `UICompositor` 提供显示隐藏接口, 字段`BasePanel.stack`来标记该面板被覆盖时, 是否需要保存在栈内, 以便新面板关闭时, 该面板被显示出来.
+
+自定义栈中需要保证每个面板仅有一个缓存, 则在`Push(targetPanel)`前先移除之前该面板的记录`mPanelStack.Remove(targetPanel)`, 关键代码如下:
+
+```C#
+    public BasePanel PushPanel(BasePanel targetPanel) {
+        if (targetPanel == mPanelStack.Peek()) {
+            return targetPanel;
+        }
+        mPanelStack.Remove(targetPanel);
+        var tempPanel = mPanelStack.Peek();
+        if (tempPanel != null) {
+            //如果新窗口关闭时, 它不需要再被显示
+            if (!tempPanel.stack) {
+                mPanelStack.Pop();
+            }
+            //不管有没有弹出栈, 都需要将它隐藏
+            tempPanel.Hide();
+        }
+        targetPanel.Show();
+        return mPanelStack.Push(targetPanel);
+    }
+
+```
+
+
+
+### 数字滚动动画
+
+游戏界面右上角的分数为使用DOTween制作的数字滚动效果, 关键是使用`Sequence` , 每次数据更新时, 将滚动动画添加到现有队列中, 保证滚动效果不会异常
+
+关键实现方法为:
+
+创建一个`Sequence`并设置它的`SetAutoKill`属性为`false`, 防止它实现一次滚动动画之后就自动销毁.
+
+```c#
+//声明
+private Sequence mScoreSequence;
+//函数内初始化
+mScoreSequence = DOTween.Sequence();
+//函数内设置属性
+mScoreSequence.SetAutoKill(false);
+```
+
+当数据更新时, 调用该界面负责处理该数据的方法, 此时用新的数据创建一个`Tweener`, 并加入动画序列中
+
+```c#
+mScoreSequence.Append(DOTween.To(delegate (float value) {
+    //向下取整
+    var temp = Math.Floor(value);
+    //向Text组件赋值
+    currentScoreText.text = temp + "";
+}, mOldScore, newScore, 0.4f));
+//将更新后的值记录下来, 用于下一次滚动动画
+mOldScore = newScore;
+```
 
 ---
 
-*待补充*
-
-### UI面板切换的分类管理
-
-### 数字滚动动画
+*待补充* 
 
 ### 行消除动画 
 

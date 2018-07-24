@@ -15,11 +15,11 @@ public class UICompositor {
         mPanelStack.Remove(targetPanel);
         var tempPanel = mPanelStack.Peek();
         if (tempPanel != null) {
-            //如果它不需要再被显示
+            //如果新窗口关闭时, 它不需要再被显示
             if (!tempPanel.stack) {
                 mPanelStack.Pop();
             }
-            //不过有没有弹出栈, 都需要将它隐藏
+            //不管有没有弹出栈, 都需要将它隐藏
             tempPanel.Hide();
         }
         targetPanel.Show();

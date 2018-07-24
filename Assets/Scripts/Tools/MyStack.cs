@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//只用于存放自定义类!
 
-public class MyStack<T> :  IEnumerable {
+
+public class MyStack<T> :  IEnumerable  where T : MonoBehaviour
+{
 
     private T[] mStackArray;
     private const int kDefaultArrayLength = 5;
