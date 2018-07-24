@@ -26,7 +26,7 @@ Unity2018.1
 
 ### UI界面使用的MVC架构
 
-![1532258890035](C:\Users\ADMINI~1\AppData\Local\Temp\1532258890035.png)
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/MVC.jpg)
 
 View层负责响应用户事件和页面显示, Controller层负责响应游戏逻辑和作为View层和Model层的介质. View层通过发送消息来获取Model层的状态信息.
 
