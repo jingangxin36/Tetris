@@ -131,11 +131,22 @@ mScoreSequence.Append(DOTween.To(delegate (float value) {
 mOldScore = newScore;
 ```
 
+
+### 行消除动画 
+
+通过设置**深度**和**颜色透明度**来实现"闪烁"效果(见[前面GIF](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo.gif))
+
+2D效果为:
+
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/2D.jpg)
+
+关键操作如下面3D截图
+
+![](https://github.com/jingangxin36/Tetris/blob/master/Demo/3D.jpg)
+
 ---
 
 *待补充* 
-
-### 行消除动画 
 
 ### 相机抖动 
 
