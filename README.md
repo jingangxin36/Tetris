@@ -144,27 +144,132 @@ mOldScore = newScore;
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/3D.jpg)
 
----
 
-*待补充* 
+### 方块加速 
 
-### 相机抖动 
+方块加速有两种条件, 一是点击`↓`按钮实现当前方块的急速下落, 二是分数达到升级条件时, 以后的每一个方块的下落速度都会更快.  
 
-### 方块急速下落 
+当个方块的急速采用的增大步伐, 每次下落五个单位(普通速度是一个单位), 但是要注意, 当方块快接近底部时, 需要逐渐减小步伐, 才能找到最合适的位置(不然可能会覆盖掉原先的方块)
+
+关键代码如下:
+
+```c#
+    private void Fall(int step = 1)
+    {
+        while (true)
+        {
+            var position = transform.position;
+            position.y -= step;
+            transform.position = position;
+            if (mControllerInstance.model.IsShapePositionValid(transform) == false)//触碰到了底部方块, 停止下落
+            {
+                position.y += step;
+                transform.position = position;
+                if (step == 1)//为一, 方块不会发生重叠
+                {
+                    mIsPause = true;
+                    //储存当前数据>>检测是否需要消除行
+                    mControllerInstance.model.PlaceShape(transform);
+                    //新shape或结束
+                    GameManager.Instance.ShapeFallDown();
+                    break;
+                }
+                step = step - 1;//如果不为1, 方块可能发生重叠
+                continue;
+            }
+            AudioManager.Instance.PlayDrop();//继续下落
+            break;
+        }
+    }
+```
+
+方块的普通加速下落使用的是缩小每一步的时间间隔, 在`Update`函数内更新, 关键代码如下
+
+```c#
+//kMultiple为加速因子
+//private const int kMultiple = 20;
+
+void Update() {
+    if (mIsPause) {
+        return;
+    }
+    mTimer += Time.deltaTime;
+    if (mIsRocket) {
+        Fall(5);
+        if (!mHasRocket) {
+            EventManager.Instance.Fire(UIEvent.CAMERA_SHAKE);
+            mHasRocket = true;
+        }
+    }
+    else {
+        if (mTimer > (mIsSpeedUp ? normalStepTime / kMultiple : normalStepTime)) {
+            mTimer = 0;
+            Fall();
+        }
+    }
+    //input
+    InputControl();
+}
+```
+
+### 相机抖动
+
+使用的是DOTween提供的API, 注意相机Shake完需要设置回原位..不然它会跑偏, Σ(っ °Д °;)っ
+
+```c#
+	//mCameraVector3 为相机原始的位置
+
+	private void CameraShake(object obj) {
+        Camera.main.DOShakePosition(0.05f, new Vector3(0, 0.2f, 0)).SetEase(Ease.Linear).OnComplete(() => {
+            Camera.main.transform.position = mCameraVector3;
+        });
+    }
+```
+
+
+### 地图的实现 
+
+地图使用的是单独的相机, 每个地图方块之间的间隔为1, 方便进行计算和方块的旋转和下落. 地图的原始大小固定, 而我们看到的地图和方块的大小由相机来决定. 
 
 ### UI风格 
 
-### 地图的实现 
+参考的是[腾讯游戏创意大赛](http://gameinstitute.qq.com/innovativegames/intr)
 
 ## 更多
 
 ### 关于俄罗斯方块
 
+《游戏改变世界——游戏化如何让现实变得更美好》 中的对俄罗斯方块反馈性的描述: 
+
+>俄罗斯方块让人欲罢不能，除了“不可能赢”这一点外，还在于它提供的**反馈力度**。
+>
+>（1）视觉上，一排又一排的方块“噗噗”地消失；
+>
+>（2）数量上，屏幕上的分数不断上涨；
+>
+>（3）**性质上，你感受到了持续上升的挑战性**（速度越来越快）。
+
+>哲学家 James P. Carse 曾经写道，游戏分为两种：**一种是有尽头的游戏，我们为了获胜而玩；一种是无尽头的游戏，我们为了尽量长时间地玩下去而玩。**我们玩俄罗斯方块的用意很简单，就是把一个优秀的游戏不停地玩下去。 
+
 ### 关于小游戏AI
+
+- GitHub上[hinesboy/ai_tetris](https://github.com/hinesboy/ai_tetris)实现了一个带有AI模式的俄罗斯方块, 使用的是[pierre-dellacheries算法](http://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm) , 其中说到最佳的方块位置由以下几个因素共同决定, 但是权重不同
+  - **Landing Height:** The height where the piece is put (= the height of the column + (the height of the piece / 2))
+  - **Rows eliminated:** The number of rows eliminated.
+  - **Row Transitions:** The total number of row transitions. A row transition occurs when an empty cell is adjacent to a filled cell on the same row and vice versa.
+  - **Column Transitions:** The total number of column transitions. A column transition occurs when an empty cell is adjacent to a filled cell on the same column and vice versa.
+  - **Number of Holes:** A hole is an empty cell that has at least one filled cell above it in the same column.
+  - **Well Sums:** A well is a succession of empty cells such that their left cells and right cells are both filled.
+- [通过俄罗斯方块浅谈游戏中的AI](https://blog.csdn.net/coollangzi/article/details/5765096)
+- [俄罗斯方块可以永无止境地玩下去吗？](http://www.matrix67.com/blog/archives/2134)
 
 ### 关于脚本编写中注意的问题
 
-### 关于游戏编程框架
+- 使用`??`或 `?. `进行空值检查时, 可能会无意中绕过底层Unity引擎对象的生命周期检查,
+  - [Possible unintended bypass of lifetime check of underlying Unity engine object](https://github.com/JetBrains/resharper-unity/wiki/Possible-unintended-bypass-of-lifetime-check-of-underlying-Unity-engine-object)
+  - [CUSTOM == OPERATOR, SHOULD WE KEEP IT?](https://blogs.unity3d.com/cn/2014/05/16/custom-operator-should-we-keep-it/)
+- 使用`CompareTag`而不是显式字符串比较`gameObject.tag == "TagName"`, 后者会产生额外的内存与性能消耗 , 因为`tag`属性返回的字符串是从Unity本机堆拷贝到C#托管堆的对象
+  - [Use CompareTag instead of explicit string comparison](https://github.com/JetBrains/resharper-unity/wiki/Use-CompareTag-instead-of-explicit-string-comparison)
 
 
 ## GitHub项目地址:

@@ -150,18 +150,12 @@ public class Shape : MonoBehaviour {
                     mControllerInstance.model.PlaceShape(transform);
                     //新shape或结束
                     GameManager.Instance.ShapeFallDown();
+                    break;
                 }
-                else
-                {
-                    step = step - 1;
-                    continue;
-                }
+                step = step - 1;
+                continue;
             }
-            else
-            {
-                AudioManager.Instance.PlayDrop();
-            }
-
+            AudioManager.Instance.PlayDrop();
             break;
         }
     }
