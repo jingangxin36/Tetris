@@ -2,29 +2,29 @@
 
 # Unity实现俄罗斯方块
 
-## 游戏截图:
+## 1. 游戏截图:
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo.gif)
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo1.gif)
 
 
-## APK下载地址:
+## 2. APK下载地址:
 
 [**MyTetris.apk**](https://github.com/jingangxin36/Tetris/releases/download/V1.1/MyTetris.apk)
 
-## 使用方法:
+## 3. 使用方法:
 
 - 安卓手机: 直接点击游戏界面按钮
 - Editor: 直接点击play
 
-## 开发环境:
+## 4. 开发环境:
 
 Unity2018.1
 
-## 实现与思考
+## 5. 技术关键点与拓展
 
-### 关于MVC架构模式
+### 5.1 关于MVC架构模式
 
 #### MVC的优缺点
 
@@ -52,7 +52,7 @@ Unity2018.1
   - 我是应该项目整体使用, 还是某些局部的需求使用呢？
 -  [探讨：为什么在游戏开发中不使用MVC？](https://zhuanlan.zhihu.com/p/38280972)
 
-### 相关的设计模式和架构:
+#### 相关的设计模式和架构:
 
 - [观察者模式](https://gpp.tkchu.me/observer.html)
 
@@ -63,13 +63,13 @@ Unity2018.1
 - [事件队列](https://gpp.tkchu.me/event-queue.html)
 
 - C#语法之[`event`关键字](http://msdn.microsoft.com/en-us/library/8627sbea.aspx)
-### UI界面使用的MVC架构
+### 5.2 UI界面使用的MVC架构
 
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/MVC.jpg)
 
 View层负责响应用户事件和页面显示, Controller层负责响应游戏逻辑和作为View层和Model层的介质. View层通过发送消息来获取Model层的状态信息.
 
-### 消息机制
+### 5.3 消息机制
 
 项目中实现了一个事件管理器`EventManager`, 负责事件的监听和派发.  Controller层负责事件的监听以及响应. 
 
@@ -105,7 +105,7 @@ public enum UIEvent {
 }
 ```
 
-### UI面板切换的分类管理
+### 5.4 UI面板切换的分类管理
 
 ui面板的切换有两种需求, 情况如下
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/面板管理.jpg)
@@ -138,9 +138,7 @@ ui面板的切换有两种需求, 情况如下
 
 ```
 
-
-
-### 数字滚动动画
+### 5.5 数字滚动动画
 
 游戏界面右上角的分数为使用DOTween制作的数字滚动效果, 关键是使用`Sequence` , 每次数据更新时, 将滚动动画添加到现有队列中, 保证滚动效果不会异常
 
@@ -171,7 +169,7 @@ mOldScore = newScore;
 ```
 
 
-### 行消除动画 
+### 5.6 行消除动画 
 
 通过设置**深度**和**颜色透明度**来实现"闪烁"效果(见[前面GIF](https://github.com/jingangxin36/Tetris/blob/master/Demo/Demo.gif))
 
@@ -184,7 +182,7 @@ mOldScore = newScore;
 ![](https://github.com/jingangxin36/Tetris/blob/master/Demo/3D.jpg)
 
 
-### 方块加速 
+### 5.7 方块加速 
 
 方块加速有两种条件, 一是点击`↓`按钮实现当前方块的急速下落, 二是分数达到升级条件时, 以后的每一个方块的下落速度都会更快.  
 
@@ -251,7 +249,7 @@ void Update() {
 }
 ```
 
-### 相机抖动
+### 5.8 相机抖动
 
 使用的是DOTween提供的API, 注意相机Shake完需要设置回原位..不然它会跑偏, Σ(っ °Д °;)っ
 
@@ -266,17 +264,17 @@ void Update() {
 ```
 
 
-### 地图的实现 
+### 5.9 地图的实现 
 
 地图使用的是单独的相机, 每个地图方块之间的间隔为1, 方便进行计算和方块的旋转和下落. 地图的原始大小固定, 而我们看到的地图和方块的大小由相机来决定. 
 
-### UI风格 
+### 5.10 UI风格 
 
 参考的是[腾讯游戏创意大赛](http://gameinstitute.qq.com/innovativegames/intr)
 
-## 更多
+## 6. 更多
 
-### 关于俄罗斯方块
+### 6.1 关于俄罗斯方块
 
 《游戏改变世界——游戏化如何让现实变得更美好》 中的对俄罗斯方块反馈性的描述: 
 
@@ -288,9 +286,9 @@ void Update() {
 >
 >（3）**性质上, 你感受到了持续上升的挑战性**（速度越来越快）. 
 
->哲学家 James P. Carse 曾经写道, 游戏分为两种：**一种是有尽头的游戏, 我们为了获胜而玩；一种是无尽头的游戏, 我们为了尽量长时间地玩下去而玩. ** 我们玩俄罗斯方块的用意很简单, 就是把一个优秀的游戏不停地玩下去.  
+>哲学家 James P. Carse 曾经写道, 游戏分为两种：**一种是有尽头的游戏, 我们为了获胜而玩；一种是无尽头的游戏, 我们为了尽量长时间地玩下去而玩.**  我们玩俄罗斯方块的用意很简单, 就是把一个优秀的游戏不停地玩下去.  
 
-### 关于小游戏AI
+### 6.2 关于小游戏AI
 
 - GitHub上[hinesboy/ai_tetris](https://github.com/hinesboy/ai_tetris)实现了一个带有AI模式的俄罗斯方块, 使用的是[pierre-dellacheries算法](http://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm) , 其中说到最佳的方块位置由以下几个因素共同决定, 但是权重不同
   - **Landing Height:** The height where the piece is put (= the height of the column + (the height of the piece / 2))
@@ -302,7 +300,7 @@ void Update() {
 - [通过俄罗斯方块浅谈游戏中的AI](https://blog.csdn.net/coollangzi/article/details/5765096)
 - [俄罗斯方块可以永无止境地玩下去吗？](http://www.matrix67.com/blog/archives/2134)
 
-### 关于脚本编写中注意的问题
+### 6.3 关于脚本编写中注意的问题
 
 - 使用`??`或 `?. `进行空值检查时, 可能会无意中绕过底层Unity引擎对象的生命周期检查,
   - [Possible unintended bypass of lifetime check of underlying Unity engine object](https://github.com/JetBrains/resharper-unity/wiki/Possible-unintended-bypass-of-lifetime-check-of-underlying-Unity-engine-object)
@@ -310,7 +308,10 @@ void Update() {
 - 使用`CompareTag`而不是显式字符串比较`gameObject.tag == "TagName"`, 后者会产生额外的内存与性能消耗 , 因为`tag`属性返回的字符串是从Unity本机堆拷贝到C#托管堆的对象
   - [Use CompareTag instead of explicit string comparison](https://github.com/JetBrains/resharper-unity/wiki/Use-CompareTag-instead-of-explicit-string-comparison)
 
+### 6.4  UGUI的性能优化问题
 
-## GitHub项目地址:
+//todo
+
+## 7. GitHub项目地址:
 
 [**jingangxin36/Tetris**](https://github.com/jingangxin36/Tetris)
